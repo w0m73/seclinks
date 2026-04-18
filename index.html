@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecLinks — Guia de Referência</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #0f1218;
+    --surface2: #161b24;
+    --border: #1e2530;
+    --accent: #00e5ff;
+    --accent2: #ff4081;
+    --accent3: #69ff47;
+    --accent4: #ffd740;
+    --text: #c9d1d9;
+    --text-dim: #586069;
+    --text-bright: #e6edf3;
+
+    --tag-wiki: #1a3a4a;
+    --tag-wiki-t: #00e5ff;
+    --tag-blue: #0d2e1a;
+    --tag-blue-t: #69ff47;
+    --tag-red: #2e0d1a;
+    --tag-red-t: #ff4081;
+    --tag-hunt: #2e2200;
+    --tag-hunt-t: #ffd740;
+    --tag-forensics: #1a1040;
+    --tag-forensics-t: #b388ff;
+    --tag-linux: #1a2e00;
+    --tag-linux-t: #76ff03;
+    --tag-windows: #002e2e;
+    --tag-windows-t: #00e5ff;
+    --tag-intel: #2e1a00;
+    --tag-intel-t: #ff9100;
+    --tag-malware: #2e0000;
+    --tag-malware-t: #ff5252;
+    --tag-tools: #001a2e;
+    --tag-tools-t: #40c4ff;
+    --tag-privesc: #1a001a;
+    --tag-privesc-t: #ea80fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === GRID BACKGROUND === */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* === HEADER === */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 48px 40px 32px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,229,255,0.05) 0%, transparent 100%);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .logo-block {}
+
+  .logo-tag {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    color: var(--text-bright);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* === CONTROLS === */
+  .controls {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .search-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  #search {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-bright);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    padding: 14px 16px 14px 44px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #search::placeholder { color: var(--text-dim); }
+
+  #search:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(0,229,255,0.1);
+  }
+
+  .filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+
+  /* === MAIN GRID === */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .results-info {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .results-info span { color: var(--accent); }
+
+  /* === CATEGORY SECTION === */
+  .category-section {
+    margin-bottom: 48px;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .category-icon {
+    font-size: 20px;
+  }
+
+  .category-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+  }
+
+  .category-count {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px;
+  }
+
+  /* === LINK CARD === */
+  .link-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .link-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-accent, var(--accent));
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .link-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .link-card:hover::before { opacity: 1; }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.4;
+  }
+
+  .card-url {
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+    opacity: 0.8;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+
+  /* === NO RESULTS === */
+  .no-results {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-dim);
+    display: none;
+  }
+
+  .no-results-icon { font-size: 48px; margin-bottom: 16px; }
+  .no-results h3 { font-family: 'Syne', sans-serif; font-size: 20px; color: var(--text); margin-bottom: 8px; }
+
+  /* === FOOTER === */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 32px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 640px) {
+    header, .controls, main { padding-left: 20px; padding-right: 20px; }
+    .links-grid { grid-template-columns: 1fr; }
+    .stats { gap: 20px; }
+  }
+
+  /* === SCAN LINE ANIM === */
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    left: 0; top: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,229,255,0.3), transparent);
+    animation: scanline 8s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* === FADE IN === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .category-section {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .category-section:nth-child(2) { animation-delay: 0.05s; }
+  .category-section:nth-child(3) { animation-delay: 0.10s; }
+  .category-section:nth-child(4) { animation-delay: 0.15s; }
+  .category-section:nth-child(5) { animation-delay: 0.20s; }
+  .category-section:nth-child(6) { animation-delay: 0.25s; }
+  .category-section:nth-child(7) { animation-delay: 0.30s; }
+  .category-section:nth-child(8) { animation-delay: 0.35s; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-tag">// security analyst reference</div>
+      <h1>Sec<span>Links</span></h1>
+      <p class="subtitle">guia de referência · analista de segurança</p>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num" id="total-links">0</span>
+        <span class="stat-label">Links</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="total-cats">0</span>
+        <span class="stat-label">Categorias</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="search-wrapper">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="search" placeholder="buscar por título, url ou descrição..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="filter-tags" id="filter-tags"></div>
+</div>
+
+<main>
+  <div class="results-info" id="results-info"></div>
+  <div id="grid-container"></div>
+  <div class="no-results" id="no-results">
+    <div class="no-results-icon">◌</div>
+    <h3>Nenhum resultado encontrado</h3>
+    <p>Tente outro termo de busca.</p>
+  </div>
+</main>
+
+<footer>
+  SECLINKS // ATUALIZADO 2025 // USE COM RESPONSABILIDADE
+</footer>
+
+<script>
+const DATA = [
+  {
+    cat: "Wiki & Guias",
+    icon: "📚",
+    tag: "wiki",
+    color: "#00e5ff",
+    links: [
+      { title: "Guia de Cybersecurity (arthurspk)", url: "https://github.com/arthurspk/guiadecybersecurity?tab=readme-ov-file", desc: "Guia completo de cibersegurança em português." },
+      { title: "HackTricks Wiki", url: "https://book.hacktricks.wiki/en/index.html", desc: "Referência definitiva de técnicas de pentest e hacking." },
+      { title: "HackTricks (PT)", url: "https://book.hacktricks.xyz/pt", desc: "Versão em português do HackTricks." },
+      { title: "0xdf Cheatsheets", url: "https://0xdf.gitlab.io/cheatsheets/", desc: "Folha de dicas curada por 0xdf para CTF e pentest." },
+      { title: "iRed.team", url: "https://www.ired.team/", desc: "Notas sobre Red Teaming e segurança ofensiva." },
+      { title: "Orange Cyberdefense OCD Mindmaps", url: "https://orange-cyberdefense.github.io/ocd-mindmaps/", desc: "Mapas mentais de técnicas de ataque e defesa." },
+      { title: "Embrace The Red (IA)", url: "https://embracethered.com/blog/", desc: "Blog relacionado a vulnerabilidades em IA." },
+      { title: "Kali Linux Tools", url: "https://www.kali.org/tools/", desc: "Lista completa de ferramentas disponíveis no Kali Linux." },
+      { title: "Linux Notes And Cheatsheet (m0chan)", url: "https://m0chan.github.io/2018/07/31/Linux-Notes-And-Cheatsheet.html", desc: "Notas e cheatsheet abrangentes de Linux." },
+      { title: "ChatGPT Cyber Security Prompts", url: "https://github.com/DummyKitty/Cyber-Security-chatGPT-prompt", desc: "Coleção de prompts de segurança para uso com LLMs." },
+    ]
+  },
+  {
+    cat: "Threat Hunting",
+    icon: "🎯",
+    tag: "hunt",
+    color: "#ffd740",
+    links: [
+      { title: "FileInfo — Executable Types", url: "https://fileinfo.com/filetypes/executable", desc: "Referência de tipos de arquivos executáveis." },
+      { title: "CyberThreatHunting (A3sal0n)", url: "https://github.com/A3sal0n/CyberThreatHunting/tree/master/hunts", desc: "Repositório de hunts para caça a ameaças cibernéticas." },
+      { title: "Hunting Malware: Critical Processes", url: "https://detect-respond.blogspot.com/2016/11/hunting-for-malware-critical-process.html", desc: "Técnica de hunting em processos críticos do Windows." },
+      { title: "DeepBlueCLI", url: "https://github.com/sans-blue-team/DeepBlueCLI", desc: "PowerShell Module para threat hunting via Windows Event Logs." },
+      { title: "Detect Malware C2 via DNS Status Codes", url: "https://www.socinvestigation.com/how-to-detect-malware-c2-with-dns-status-codes/", desc: "Como detectar C2 de malware com códigos de status DNS." },
+      { title: "Detecting C2 via Sysmon + Event Logs", url: "https://www.ericconrad.com/2024/04/detecting-command-and-control.html", desc: "Detectando frameworks C2 via Sysmon e Windows Event Logging." },
+      { title: "FireEye Red Team TTPs", url: "https://achilleas.com.br/fireeye-ttps/", desc: "TTPs utilizados pelas ferramentas roubadas do Red Team da FireEye." },
+      { title: "Browse Process Library by Name", url: "https://www.processlibrary.com/en/directory/l/1/", desc: "Diretório de processos para identificação e análise." },
+      { title: "Windows Core Processes Mindmap (SBousseaden)", url: "https://x.com/SBousseaden/status/1195373669930983424/photo/1", desc: "Mindmap dos processos core do Windows — excelente para hunting." },
+      { title: "matkap CTI Monster", url: "https://matkap.cti.monster/", desc: "Plataforma de Cyber Threat Intelligence." },
+      { title: "Cyber Threat Intelligence (start.me)", url: "https://start.me/p/wMrA5z/cyber-threat-intelligence", desc: "Coleção curada de recursos CTI." },
+    ]
+  },
+  {
+    cat: "Blue Team",
+    icon: "🛡️",
+    tag: "blue",
+    color: "#69ff47",
+    links: [
+      { title: "BlueTeam-Tools (A-poc)", url: "https://github.com/A-poc/BlueTeam-Tools", desc: "Coleção de ferramentas para times de defesa." },
+      { title: "GoDefender", url: "https://github.com/EvilBytecode/GoDefender", desc: "Ferramenta de defesa escrita em Go." },
+      { title: "AMSI — How It Helps", url: "https://learn.microsoft.com/en-us/windows/win32/amsi/how-amsi-helps", desc: "Visibilidade de scripts ofuscados via AMSI." },
+      { title: "AMSI Portal", url: "https://learn.microsoft.com/en-us/windows/win32/amsi/antimalware-scan-interface-portal", desc: "Portal da interface de scan antimalware da Microsoft." },
+      { title: "Windows Security Events (UltimateWindowsSecurity)", url: "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4625", desc: "Enciclopédia de eventos do Windows explicados (ex: 4625)." },
+      { title: "AD Advanced Threat Hunting — Account Lockouts", url: "https://techcommunity.microsoft.com/discussions/windowsserver/active-directory-advanced-threat-hunting---tracing-the-cause-of-account-lockouts/4104108", desc: "Rastreando causas de lockout de conta no Active Directory." },
+      { title: "Wireshark Cheat Sheet", url: "https://www.comparitech.com/net-admin/wireshark-cheat-sheet/", desc: "Referência rápida de filtros e uso do Wireshark." },
+      { title: "Linux Audit Logs Cheatsheet", url: "https://www.socinvestigation.com/linux-audit-logs-cheatsheet-detect-respond-faster/", desc: "Cheatsheet de audit logs do Linux para detecção e resposta." },
+      { title: "Linux Event Logs & Record Types", url: "https://www.socinvestigation.com/linux-event-logs-and-its-record-types-detect-respond/", desc: "Tipos de logs de eventos no Linux e como usá-los." },
+      { title: "Malware Archaeology Cheat Sheets (DFIR)", url: "https://www.malwarearchaeology.com/cheat-sheets", desc: "Cheat sheets focados em DFIR e análise de logs." },
+      { title: "Linux Forensics Cheatsheet", url: "https://fahmifj.github.io/articles/linux-forensics-cheatsheet/", desc: "Cheatsheet completo de forense em Linux." },
+      { title: "Splunk Cheat Sheet", url: "https://www.stationx.net/splunk-cheat-sheet/", desc: "Referência rápida de consultas Splunk." },
+      { title: "OleTools — Análise de Arquivos OLE2", url: "https://github.com/decalage2/oletools", desc: "Pacote Python para analisar arquivos Microsoft OLE2 (Office)." },
+      { title: "VPS Audit Script", url: "https://github.com/vernu/vps-audit", desc: "Script Bash abrangente para auditoria de segurança de VPS." },
+      { title: "Cyber Security Predictions 2025 (SOCInvestigation)", url: "https://www.socinvestigation.com/top-10-cybersecurity-predictions-for-2025/", desc: "Top 10 previsões de cibersegurança para 2025." },
+    ]
+  },
+  {
+    cat: "Red Team / Offensive",
+    icon: "⚔️",
+    tag: "red",
+    color: "#ff4081",
+    links: [
+      { title: "PowerUp.ps1 (PowerSploit)", url: "https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1", desc: "Script PowerShell para escalação de privilégios no Windows." },
+      { title: "Exploit-DB: 39161", url: "https://www.exploit-db.com/exploits/39161", desc: "Referência de exploit no Exploit-DB." },
+      { title: "Nishang (samratashok)", url: "https://github.com/samratashok/nishang", desc: "Framework de scripts PowerShell para Red Team." },
+      { title: "Invoke-PowerShellTcp.ps1", url: "https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1", desc: "Reverse shell TCP em PowerShell via Nishang." },
+      { title: "Shell Reverse Cheatsheet (SwisskyRepo)", url: "https://swisskyrepo.github.io/InternalAllTheThings/cheatsheets/shell-reverse-cheatsheet/", desc: "Cheatsheet completo de shells reversos." },
+      { title: "Shell Bind Cheatsheet (SwisskyRepo)", url: "https://swisskyrepo.github.io/InternalAllTheThings/cheatsheets/shell-bind-cheatsheet/", desc: "Cheatsheet de bind shells." },
+      { title: "Reverse Shell Cheatsheet (PayloadsAllTheThings)", url: "https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md", desc: "Cheatsheet de shell reverso do PayloadsAllTheThings." },
+      { title: "HighOn.Coffee Reverse Shell", url: "https://highon.coffee/blog/reverse-shell-cheat-sheet/", desc: "Shell reverso em diversas linguagens e ferramentas." },
+      { title: "PayloadsAllTheThings", url: "https://github.com/swisskyrepo/PayloadsAllTheThings", desc: "Repositório completo de payloads para escalação de privilégio e mais." },
+      { title: "Orange Cyberdefense Arsenal", url: "https://github.com/Orange-Cyberdefense/arsenal", desc: "Inventário e launcher rápido de comandos de pentest." },
+      { title: "KeePwn (KeePass Red Team)", url: "https://github.com/Orange-Cyberdefense/KeePwn", desc: "Script Python para descobrir instâncias KeePass e extrair segredos." },
+      { title: "Above — Protocol Sniffer", url: "https://github.com/casterbyte/Above", desc: "Sniffer invisível para encontrar vulnerabilidades na rede." },
+      { title: "Cobalt Strike 3.11 Blog", url: "https://www.cobaltstrike.com/blog/cobalt-strike-3-11-the-snake-that-eats-its-tail", desc: "Post oficial do blog do Cobalt Strike." },
+      { title: "Hacking Articles — Red Teaming", url: "https://www.hackingarticles.in/red-teaming/", desc: "Artigos sobre técnicas de Red Teaming." },
+      { title: "ThreatFox (Abuse.ch)", url: "https://threatfox.abuse.ch/browse/", desc: "Base de dados de IoCs para threat intelligence." },
+      { title: "Living off the Land (LotL)", url: "https://www.attackiq.com/2023/03/16/hiding-in-plain-sight/", desc: "Técnica de uso de binários nativos para evasão." },
+      { title: "Bring Your Own Land (BYOL)", url: "https://cloud.google.com/blog/topics/threat-intelligence/bring-your-own-land-novel-red-teaming-technique/", desc: "Nova técnica de Red Teaming — BYOL." },
+      { title: "MSBuild Bypass (Talos)", url: "https://blog.talosintelligence.com/building-bypass-with-msbuild/", desc: "Bypass de segurança usando MSBuild." },
+      { title: "ncat.exe (Static Binaries)", url: "https://github.com/andrew-d/static-binaries/blob/master/binaries/windows/x86/ncat.exe", desc: "Binary estático do ncat para Windows." },
+      { title: "Powercat (alternativa Netcat Windows)", url: "https://github.com/besimorhino/powercat", desc: "Alternativa PowerShell ao Netcat para Windows." },
+      { title: "socat (man page Linux)", url: "https://linux.die.net/man/1/socat", desc: "Alternativa ao Netcat para Linux." },
+      { title: "Inferi Club", url: "https://inferi.club/", desc: "Recurso de segurança ofensiva." },
+      { title: "OSINT Sock Puppets", url: "https://www.hackingarticles.in/sock-puppets-in-osint/", desc: "Guia sobre uso de sock puppets em OSINT." },
+      { title: "Mandiant/Google Threat Intelligence Blog", url: "https://cloud.google.com/blog/topics/threat-intelligence/", desc: "Blog de inteligência de ameaças do Google/Mandiant." },
+    ]
+  },
+  {
+    cat: "Privilege Escalation",
+    icon: "⬆️",
+    tag: "privesc",
+    color: "#ea80fc",
+    links: [
+      { title: "HackTricks — Linux PrivEsc Checklist", url: "https://book.hacktricks.wiki/en/linux-hardening/linux-privilege-escalation-checklist.html", desc: "Checklist de escalação de privilégio no Linux." },
+      { title: "HackTricks — Windows PrivEsc Checklist", url: "https://book.hacktricks.wiki/en/windows-hardening/checklist-windows-privilege-escalation.html", desc: "Checklist de escalação de privilégio no Windows." },
+      { title: "PayloadsAllTheThings — Linux PrivEsc", url: "https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Privilege%20Escalation.md", desc: "Técnicas de escalação no Linux do PayloadsAllTheThings." },
+      { title: "PayloadsAllTheThings — Windows PrivEsc", url: "https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md", desc: "Técnicas de escalação no Windows do PayloadsAllTheThings." },
+      { title: "PEASS-ng (LinPEAS / WinPEAS)", url: "https://github.com/peass-ng/PEASS-ng", desc: "Scripts de enumeração e escalação de privilégio." },
+      { title: "LinEnum", url: "https://github.com/rebootuser/LinEnum", desc: "Script de enumeração de informações no Linux." },
+      { title: "LinuxPrivChecker", url: "https://github.com/sleventyeleven/linuxprivchecker", desc: "Verificador de escalação de privilégio Linux." },
+      { title: "GTFOBins", url: "https://gtfobins.github.io/", desc: "Exploração de binários via sudo para escalação." },
+      { title: "GTFOBins — PHP", url: "https://gtfobins.github.io/gtfobins/php/", desc: "Como explorar PHP via sudo." },
+      { title: "Sudo Rights Exploitation", url: "https://www.hackingarticles.in/linux-privilege-escalation-using-exploiting-sudo-rights/", desc: "Escalação via direitos de sudo." },
+      { title: "Seatbelt (GhostPack)", url: "https://github.com/GhostPack/Seatbelt", desc: "Enumeração de segurança em ambiente Windows / emular assembly .NET." },
+      { title: "JAWS (Windows Enum)", url: "https://github.com/411Hall/JAWS", desc: "Script de enumeração de escalação de privilégio Windows." },
+      { title: "LOLBAS Project", url: "https://lolbas-project.github.io/#", desc: "Aplicativos Windows para execução privilegiada Living off the Land." },
+      { title: "WinSxS DLL Search Order Hijacking PoC", url: "https://github.com/thiagopeixoto/winsos-poc?tab=readme-ov-file", desc: "PoC de DLL Hijacking via pasta WinSxS." },
+      { title: "Getting SYSTEM (decoder.cloud)", url: "https://decoder.cloud/2018/02/02/getting-system/", desc: "Técnicas para obter privilégio SYSTEM no Windows." },
+      { title: "PSGetSystem — Falsificação de PID Pai", url: "https://github.com/decoder-it/psgetsystem", desc: "Falsificação de PID pai para escalação de privilégio." },
+    ]
+  },
+  {
+    cat: "Windows & Active Directory",
+    icon: "🪟",
+    tag: "windows",
+    color: "#00e5ff",
+    links: [
+      { title: "Windows Event Types", url: "https://learn.microsoft.com/en-us/windows/win32/eventlog/event-types", desc: "Tipos de eventos de log do Windows." },
+      { title: "Wevtutil (Windows Event Log CLI)", url: "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil", desc: "Ferramenta de linha de comando para logs de evento Windows." },
+      { title: "Get-WinEvent (PowerShell)", url: "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent?view=powershell-7.5", desc: "Documentação do cmdlet Get-WinEvent no PowerShell 7.5." },
+      { title: "Advanced XML Filtering in Event Viewer", url: "https://techcommunity.microsoft.com/blog/askds/advanced-xml-filtering-in-the-windows-event-viewer/399761", desc: "Filtragem avançada de eventos via XML no Windows." },
+      { title: "SACL Access Right", url: "https://learn.microsoft.com/en-us/windows/win32/secauthz/sacl-access-right", desc: "Documentação sobre SACL no Windows." },
+      { title: "Audit Generation", url: "https://learn.microsoft.com/en-us/windows/win32/secauthz/audit-generation", desc: "Geração de auditoria no Windows." },
+      { title: "Access Control Lists (ACL)", url: "https://learn.microsoft.com/en-us/windows/win32/secauthz/access-control-lists", desc: "Listas de controle de acesso no Windows." },
+      { title: "ACE Strings (MSDN)", url: "https://learn.microsoft.com/en-us/windows/win32/secauthz/ace-strings?redirectedfrom=MSDN", desc: "Strings de ACE para controle de acesso." },
+      { title: "Privilege Constants", url: "https://learn.microsoft.com/en-us/windows/win32/secauthz/privilege-constants", desc: "Constantes de privilégio do Windows." },
+      { title: "CLR (.NET Common Language Runtime)", url: "https://learn.microsoft.com/en-us/dotnet/standard/clr", desc: "Documentação do CLR do .NET." },
+      { title: "Managed Code (.NET)", url: "https://learn.microsoft.com/en-us/dotnet/standard/managed-code", desc: "O que é código gerenciado no .NET." },
+      { title: "LSASS (Wikipedia)", url: "https://en.wikipedia.org/wiki/Local_Security_Authority_Subsystem_Service", desc: "Informações sobre o processo LSASS do Windows." },
+      { title: "System Informer (Process Hacker)", url: "https://systeminformer.sourceforge.io/", desc: "Monitor avançado de processos Windows." },
+      { title: "Contas Usuários Locais (CMD)", url: "https://postsinfo.blogspot.com/2016/07/contas-usuarios-cmd.html", desc: "Gerenciamento de contas locais via linha de comando." },
+      { title: "UnmanagedPowerShell Injection", url: "https://github.com/leechristensen/UnmanagedPowerShell", desc: "Injeção não gerenciada do PowerShell." },
+      { title: "PSInject — Inject PowerShell", url: "https://github.com/EmpireProject/PSInject", desc: "Injeta PowerShell em qualquer processo." },
+      { title: "Detecting .NET/C# Injection (Execute-Assembly)", url: "https://redhead0ntherun.medium.com/detecting-net-c-injection-execute-assembly-1894dbb04ff7", desc: "Como detectar injeção .NET / Execute-Assembly." },
+      { title: "HTB Windows Event Logs & Finding Evil", url: "https://faresbltagy.gitbook.io/footprintinglabs/soc-hackthebox-notes-and-labs/windows-event-logs-and-finding-evil-module", desc: "Notas do HackTheBox sobre análise de event logs." },
+    ]
+  },
+  {
+    cat: "ETW & Sysmon",
+    icon: "📡",
+    tag: "tools",
+    color: "#40c4ff",
+    links: [
+      { title: "Sysmon v15.1 (Sysinternals)", url: "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon", desc: "Download e documentação oficial do Sysmon." },
+      { title: "sysmon-config (SwiftOnSecurity)", url: "https://github.com/SwiftOnSecurity/sysmon-config", desc: "Configuração de Sysmon amplamente usada." },
+      { title: "sysmon-modular (olafhartong)", url: "https://github.com/olafhartong/sysmon-modular", desc: "Configuração modular do Sysmon." },
+      { title: "SysmonForLinux (Microsoft)", url: "https://github.com/microsoft/SysmonForLinux", desc: "Versão do Sysmon para Linux." },
+      { title: "ETW — About Event Tracing (MS Docs)", url: "https://learn.microsoft.com/en-us/windows/win32/etw/about-event-tracing", desc: "Documentação oficial do ETW da Microsoft." },
+      { title: "ETW Introduction (Web Archive)", url: "https://web.archive.org/web/20200725154736/https://docs.microsoft.com/en-us/archive/blogs/ntdebugging/part-1-etw-introduction-and-overview", desc: "Introdução e visão geral do ETW (parte 1)." },
+      { title: "ETW Primer (nasbench — Medium)", url: "https://nasbench.medium.com/a-primer-on-event-tracing-for-windows-etw-997725c082bf", desc: "Guia introdutório ao ETW, incluindo provedores .NET." },
+      { title: "Beginner's Guide to ETW (bmcder)", url: "https://bmcder.com/blog/a-begginers-all-inclusive-guide-to-etw", desc: "Guia all-inclusive do ETW para iniciantes." },
+      { title: "EtwExplorer (zodiacon)", url: "https://github.com/zodiacon/EtwExplorer", desc: "Visualizador de metadados de provedores ETW." },
+      { title: "WEPExplorer — Info sobre Provedores ETW", url: "https://github.com/0xeb/WinTools/tree/master/WEPExplorer", desc: "Ferramenta para obter informações de provedores ETW específicos." },
+      { title: ".NET Well-Known Event Providers", url: "https://learn.microsoft.com/pt-br/dotnet/core/diagnostics/well-known-event-providers", desc: "Provedores de eventos conhecidos no .NET." },
+      { title: "ETW Providers Docs (repnz)", url: "https://github.com/repnz/etw-providers-docs", desc: "Manifestos ETW extraídos de diversas versões do Windows." },
+      { title: "SilkETW (Mandiant)", url: "https://github.com/mandiant/SilkETW", desc: "Coleta de dados do Microsoft-Windows-Kernel-Process." },
+      { title: "Threat Hunting com ETW + HELK — SilkETW", url: "https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0", desc: "Explicação detalhada de threat hunting com ETW e SilkETW." },
+      { title: "Microsoft-Windows-Threat-Intelligence (jsecurity101)", url: "https://jsecurity101.medium.com/uncovering-windows-events-b4b9db7eac54", desc: "Descobrindo eventos Windows para threat intelligence." },
+      { title: "ETW Links — Gist (alexander-hanel)", url: "https://gist.github.com/alexander-hanel/db02aa8b1b03911008cd4012ef483243", desc: "Coletânea de vários links úteis sobre ETW." },
+    ]
+  },
+  {
+    cat: "DLL & Injeção",
+    icon: "💉",
+    tag: "tools",
+    color: "#40c4ff",
+    links: [
+      { title: "Hijacking DLLs in Windows (Wietze)", url: "https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows", desc: "Artigo detalhado sobre DLL Hijacking no Windows." },
+      { title: "ReflectiveDLLInjection (stephenfewer)", url: "https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin", desc: "Injeção de DLL reflexiva." },
+      { title: "HijackLibs — DLL Hijacking Opportunities", url: "https://hijacklibs.net/#", desc: "Banco de dados de oportunidades de DLL Hijacking." },
+      { title: "Awesome Industrial Protocols", url: "https://github.com/Orange-Cyberdefense/awesome-industrial-protocols", desc: "Lista curada de protocolos industriais para segurança." },
+    ]
+  },
+  {
+    cat: "Linux",
+    icon: "🐧",
+    tag: "linux",
+    color: "#76ff03",
+    links: [
+      { title: "Linux Man Pages (die.net)", url: "https://linux.die.net/man/", desc: "Referência completa de man pages do Linux." },
+      { title: "Vim Cheat Sheet", url: "https://vim.rtorr.com/", desc: "Cheatsheet interativo de comandos do Vim." },
+      { title: "Updog — Servidor Web Avançado", url: "https://github.com/sc0tfree/updog", desc: "Servidor web mais avançado que python3 -m http.server." },
+      { title: "Crontab Guru", url: "https://crontab.guru/", desc: "Editor e validador visual de expressões crontab." },
+      { title: "64-bit Linux Assembly & Shellcoding", url: "https://www.hackingarticles.in/64-bit-linux-assembly-and-shellcoding/", desc: "Introdução a assembly e shellcoding em Linux 64-bit." },
+      { title: "Linux Forensics Cheatsheet", url: "https://fahmifj.github.io/articles/linux-forensics-cheatsheet/", desc: "Referência rápida de forense Linux." },
+    ]
+  },
+  {
+    cat: "Redes & Portas",
+    icon: "🌐",
+    tag: "tools",
+    color: "#40c4ff",
+    links: [
+      { title: "Common Ports Cheat Sheet (StationX)", url: "https://www.stationx.net/common-ports-cheat-sheet/", desc: "Cheat sheet das portas mais comuns usadas em redes." },
+      { title: "Common Ports PDF (PacketLife/Archive.org)", url: "https://web.archive.org/web/20240315102711/https://packetlife.net/media/library/23/common-ports.pdf", desc: "PDF de referência de portas comuns via Archive.org." },
+      { title: "Nmap — Top 1000 TCP/UDP Ports", url: "https://nullsec.us/top-1-000-tcp-and-udp-ports-nmap-default/", desc: "As top 1000 portas TCP e UDP padrão do Nmap." },
+      { title: "Nmap Download", url: "https://nmap.org/download.html", desc: "Página de download do Nmap / Netcat para Windows." },
+      { title: "HTTP Status Codes (Wikipedia)", url: "https://en.wikipedia.org/wiki/List_of_HTTP_status_codes", desc: "Lista completa de códigos de status HTTP." },
+      { title: "ViewDNS.info", url: "https://viewdns.info/", desc: "Ferramentas de lookup DNS, IP e WHOIS." },
+      { title: "DNSlytics", url: "https://dnslytics.com/", desc: "Análise e histórico de DNS e IPs." },
+      { title: "DNSDumpster", url: "https://dnsdumpster.com/", desc: "Reconhecimento de DNS e mapeamento de domínios." },
+      { title: "SecurityTrails", url: "https://securitytrails.com/", desc: "Dados históricos de DNS e inteligência de superfície de ataque." },
+      { title: "Google Apps Toolbox", url: "https://toolbox.googleapps.com/apps/main/", desc: "Ferramentas de diagnóstico de email e DNS do Google." },
+      { title: "GoDaddy WHOIS — Data de Registro de Domínio", url: "https://www.godaddy.com/pt-br/offers/whois-b", desc: "Verificar quando um domínio foi registrado." },
+      { title: "Pulsedive", url: "https://pulsedive.com/", desc: "Plataforma de threat intelligence com dados de IPs e domínios." },
+    ]
+  },
+  {
+    cat: "Malware & Análise",
+    icon: "🦠",
+    tag: "malware",
+    color: "#ff5252",
+    links: [
+      { title: "VX-Underground", url: "https://vx-underground.org/", desc: "Maior coleção de código-fonte, amostras e documentos de malware." },
+      { title: "Triage Sandbox", url: "https://tria.ge/", desc: "Sandbox online para análise de malware." },
+      { title: "Malware Collection (b30wulf)", url: "https://github.com/b30wulf/Malware-collection?tab=readme-ov-file", desc: "Repositório de coleção de malware para estudo." },
+      { title: "WetW0rk — Voltado para Windows", url: "https://wetw0rk.github.io/", desc: "Recursos de análise de malware focados em Windows." },
+      { title: "OleTools — Análise OLE2 (Office)", url: "https://github.com/decalage2/oletools", desc: "Pacote Python para analisar arquivos Microsoft OLE2." },
+      { title: "Tabela Decimal-Hexa-Binário", url: "https://servicenow.iu.edu/kb?id=kb_article_view&sysparm_article=KB0026046", desc: "Tabela de conversão decimal, hexadecimal e binário." },
+      { title: "Executable File Extensions (Windows)", url: "https://aerorock.co.nz/list-of-executable-file-extensions-windows/", desc: "Lista de extensões de arquivos executáveis no Windows." },
+      { title: "Executable Types Reference (gist)", url: "https://gist.github.com/ddouhine/9ec36c228b1876df6e6a", desc: "Gist de referência de tipos de arquivos executáveis." },
+    ]
+  },
+  {
+    cat: "Phishing & Engenharia Social",
+    icon: "🎣",
+    tag: "red",
+    color: "#ff4081",
+    links: [
+      { title: "Phishing Frenzy", url: "http://github.com/pentestgeek/phishing-frenzy", desc: "Framework de campanha de phishing." },
+      { title: "GoPhish", url: "http://github.com/gophish/gophish", desc: "Framework open source de simulação de phishing." },
+      { title: "Evilginx", url: "http://github.com/kgretzky/evilginx", desc: "Framework de phishing com bypass de 2FA." },
+      { title: "Social Engineer Toolkit (SET)", url: "http://github.com/trustedsec/social-engineer-toolkit", desc: "Toolkit clássico de engenharia social." },
+      { title: "Zphisher", url: "http://github.com/htr-tech/zphisher", desc: "Ferramenta de phishing de páginas populares." },
+      { title: "SocialFish", url: "http://github.com/UndeadSec/SocialFish", desc: "Ferramenta de phishing via redes sociais." },
+      { title: "WiFiPhisher", url: "http://github.com/wifiphisher/wifiphisher", desc: "Ataque de phishing via Wi-Fi." },
+      { title: "King Phisher", url: "http://github.com/rsmusllp/king-phisher", desc: "Ferramenta de campanha e análise de phishing." },
+    ]
+  },
+  {
+    cat: "Dorks & OSINT",
+    icon: "🔎",
+    tag: "hunt",
+    color: "#ffd740",
+    links: [
+      { title: "OneDorkForAll (SecShiv)", url: "https://github.com/SecShiv/OneDorkForAll/tree/main/dorks", desc: "Coleção abrangente de Google Dorks para segurança." },
+      { title: "OSINT — Sock Puppets", url: "https://www.hackingarticles.in/sock-puppets-in-osint/", desc: "Criação e uso de sock puppets em investigações OSINT." },
+      { title: "ViewDNS.info", url: "https://viewdns.info/", desc: "Ferramentas online de DNS e reconhecimento." },
+      { title: "DNSDumpster", url: "https://dnsdumpster.com/", desc: "Mapeamento de infraestrutura via DNS." },
+    ]
+  },
+  {
+    cat: "HTB & Labs",
+    icon: "🏋️",
+    tag: "tools",
+    color: "#40c4ff",
+    links: [
+      { title: "HTB — Getting Started (rubenhortas)", url: "https://rubenhortas.github.io/posts/htb-getting-started/", desc: "Guia de início no HackTheBox." },
+      { title: "HTB — Windows Event Logs & Finding Evil", url: "https://faresbltagy.gitbook.io/footprintinglabs/soc-hackthebox-notes-and-labs/windows-event-logs-and-finding-evil-module", desc: "Módulo HackTheBox de análise de event logs e detecção." },
+      { title: "Local Testing Server (MDN)", url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Tools_and_setup/set_up_a_local_testing_server", desc: "Como configurar um servidor de testes local." },
+    ]
+  },
+];
+
+// === BUILD UI ===
+let activeFilter = "all";
+
+function getTagStyle(tag) {
+  const map = {
+    wiki:      { bg: "#1a3a4a", color: "#00e5ff" },
+    blue:      { bg: "#0d2e1a", color: "#69ff47" },
+    red:       { bg: "#2e0d1a", color: "#ff4081" },
+    hunt:      { bg: "#2e2200", color: "#ffd740" },
+    forensics: { bg: "#1a1040", color: "#b388ff" },
+    linux:     { bg: "#1a2e00", color: "#76ff03" },
+    windows:   { bg: "#002e2e", color: "#00e5ff" },
+    intel:     { bg: "#2e1a00", color: "#ff9100" },
+    malware:   { bg: "#2e0000", color: "#ff5252" },
+    tools:     { bg: "#001a2e", color: "#40c4ff" },
+    privesc:   { bg: "#1a001a", color: "#ea80fc" },
+  };
+  return map[tag] || { bg: "#1a1a1a", color: "#aaa" };
+}
+
+function getDomain(url) {
+  try { return new URL(url).hostname.replace("www.", ""); }
+  catch { return url; }
+}
+
+function buildFilters() {
+  const tags = [...new Set(DATA.map(c => c.tag))];
+  const container = document.getElementById("filter-tags");
+
+  const allBtn = document.createElement("button");
+  allBtn.className = "filter-btn active";
+  allBtn.textContent = "Todos";
+  allBtn.dataset.filter = "all";
+  allBtn.onclick = () => setFilter("all");
+  container.appendChild(allBtn);
+
+  const tagLabels = {
+    wiki: "Wiki", blue: "Blue Team", red: "Red Team", hunt: "Hunting",
+    linux: "Linux", windows: "Windows", malware: "Malware", tools: "Ferramentas",
+    privesc: "Priv Esc", intel: "Intel", forensics: "Forense"
+  };
+
+  tags.forEach(tag => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn";
+    btn.textContent = tagLabels[tag] || tag;
+    btn.dataset.filter = tag;
+    btn.onclick = () => setFilter(tag);
+    container.appendChild(btn);
+  });
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll(".filter-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.filter === f);
+  });
+  render();
+}
+
+function render() {
+  const query = document.getElementById("search").value.toLowerCase().trim();
+  const container = document.getElementById("grid-container");
+  container.innerHTML = "";
+
+  let totalVisible = 0;
+
+  DATA.forEach(cat => {
+    if (activeFilter !== "all" && cat.tag !== activeFilter) return;
+
+    const filtered = cat.links.filter(link => {
+      if (!query) return true;
+      return (
+        link.title.toLowerCase().includes(query) ||
+        link.url.toLowerCase().includes(query) ||
+        (link.desc && link.desc.toLowerCase().includes(query))
+      );
+    });
+
+    if (filtered.length === 0) return;
+    totalVisible += filtered.length;
+
+    const section = document.createElement("div");
+    section.className = "category-section";
+
+    const tagStyle = getTagStyle(cat.tag);
+
+    section.innerHTML = `
+      <div class="category-header">
+        <span class="category-icon">${cat.icon}</span>
+        <span class="category-title">${cat.cat}</span>
+        <span class="category-count">${filtered.length} link${filtered.length !== 1 ? "s" : ""}</span>
+      </div>
+      <div class="links-grid"></div>
+    `;
+
+    const grid = section.querySelector(".links-grid");
+
+    filtered.forEach(link => {
+      const card = document.createElement("a");
+      card.className = "link-card";
+      card.href = link.url;
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
+      card.style.setProperty("--card-accent", cat.color);
+
+      card.innerHTML = `
+        <span class="card-tag" style="background:${tagStyle.bg};color:${tagStyle.color}">${cat.cat}</span>
+        <span class="card-title">${highlight(link.title, query)}</span>
+        <span class="card-url">${getDomain(link.url)}</span>
+        ${link.desc ? `<span class="card-desc">${highlight(link.desc, query)}</span>` : ""}
+      `;
+
+      grid.appendChild(card);
+    });
+
+    container.appendChild(section);
+  });
+
+  // stats
+  const totalLinks = DATA.reduce((a, c) => a + c.links.length, 0);
+  document.getElementById("total-links").textContent = totalLinks;
+  document.getElementById("total-cats").textContent = DATA.length;
+
+  // results info
+  const info = document.getElementById("results-info");
+  if (query || activeFilter !== "all") {
+    info.innerHTML = `Exibindo <span>${totalVisible}</span> links`;
+  } else {
+    info.innerHTML = `<span>${totalLinks}</span> links em <span>${DATA.length}</span> categorias`;
+  }
+
+  document.getElementById("no-results").style.display = totalVisible === 0 ? "block" : "none";
+}
+
+function highlight(text, query) {
+  if (!query) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return text.replace(new RegExp(`(${escaped})`, "gi"), '<mark style="background:#ffd74033;color:#ffd740;border-radius:2px">$1</mark>');
+}
+
+// Init
+buildFilters();
+render();
+
+document.getElementById("search").addEventListener("input", render);
+</script>
+</body>
+</html>
