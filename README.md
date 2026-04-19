@@ -1,5 +1,5 @@
 # 🔐 SecLinks — Guia de Referência para Analistas de Segurança
-[Link de acesso ao site](https://w0m73.github.io/seclinks/)
+[Visite o site](https://w0m73.github.io/seclinks/)
 
 Guia de consulta rápida com links curados para analistas de segurança, organizado por categorias e com busca em tempo real.
 
